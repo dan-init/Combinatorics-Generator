@@ -10,27 +10,33 @@ k = IntVar()
 def display_results():
     """Displays messagebox depending on which checkbox is selected"""
     if permutations_checkbox_state.get() == 1:
-        permutations(n, k)
+        permutations_no_repeats(n, k)
     elif combinations_checkbox_state.get() ==1:
-        combinations(n, k)
+        combinations_no_repeats(n, k)
 
-def permutations(n:int, k:int) -> int:
-    """Function to return the number of permutations for two given integers"""
+def permutations_no_repeats(n:int, k:int) -> int:
+    """Returns number of permutations possible where numbers cannot repeat"""
     non_repeat_permutations = (factorial(n.get())//factorial(n.get()-k.get()))
-    repeat_permutations = (n.get()**k.get())
-
     return messagebox.showinfo('Permutation Results', 
-    'Permutations without repeat numbers: '+ str("{:,}".format(non_repeat_permutations)) + 
-    '\nPermutations with repeat numbers: '+ str("{:,}".format(repeat_permutations)))
+    'Permutations without repeat numbers: '+ str("{:,}".format(non_repeat_permutations))) 
+    
+def permutations_with_repeats():
+    """Returns number of permutations possible where numbers can repeat"""
+    repeat_permutations = (n.get()**k.get())
+    return messagebox.showinfo('Permutations Results'
+    'Permutations with repeat numbers: '+ str("{:,}".format(repeat_permutations)))
 
-def combinations(n:int, k:int) -> int:
+def combinations_no_repeats(n:int, k:int) -> int:
     """Function which returns the number of combinations possible from two given integers"""
     non_repeat_combinations = (factorial(n.get())//(factorial(k.get())*factorial(n.get()-k.get())))
-    repeat_combinations = factorial(k.get() + (n.get()-1))//(factorial(k.get())*(factorial(n.get()-1)))
-
     return messagebox.showinfo('Combination Results', 
-    'Combinations without repeat numbers: '+ str("{:,}".format(non_repeat_combinations)) + 
-    '\nCombinations with repeat numbers: '+ str("{:,}".format(repeat_combinations)))
+    'Combinations without repeat numbers: '+ str("{:,}".format(non_repeat_combinations)))
+   
+def combinations_with_repeats(n:int, k:int) -> int:
+    """Returns number of possible combitions where numbers can repeat"""
+    repeat_combinations = factorial(k.get() + (n.get()-1))//(factorial(k.get())*(factorial(n.get()-1)))
+    return messagebox.showinfo('Combination Results', 
+    'Combintations with repeat numbers' + str("{:,}".format(repeat_combinations)))
 
 class Gui:
     def __init__(self, master):
