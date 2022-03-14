@@ -8,10 +8,11 @@ n = IntVar()
 k = IntVar()
 
 def display_results():
-        if permutations_checkbox_state.get() == 1:
-            permutations(n, k)
-        elif combinations_checkbox_state.get() ==1:
-            combinations(n, k)
+    """Displays messagebox depending on which checkbox is selected"""
+    if permutations_checkbox_state.get() == 1:
+        permutations(n, k)
+    elif combinations_checkbox_state.get() ==1:
+        combinations(n, k)
 
 def permutations(n:int, k:int) -> int:
     """Function to return the number of permutations for two given integers"""
