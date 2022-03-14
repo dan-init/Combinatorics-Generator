@@ -1,5 +1,6 @@
 from math import factorial
-from tkinter import IntVar, Label, Button, Entry, Checkbutton, messagebox, Tk
+from tkinter import VERTICAL, IntVar, Label, Button, Entry, Checkbutton, messagebox, Tk
+from tkinter.ttk import Separator
 
 root = Tk()
 permutations_checkbox_state = IntVar()
@@ -55,6 +56,7 @@ class Gui:
         master.bind("<Escape>", lambda x : root.destroy())
         master.title = root.title('Combinatorics Generator')
         master.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
+        master.separator = Separator(root, orient = VERTICAL)
 
         #Labels
         master.permutation_label = Label(root, text='Permutations')
@@ -79,18 +81,18 @@ class Gui:
         master.calc = Button(root, text='Calculate', command=display_results)
 
         #Grid
-        master.permutation_label.grid(row=0, column=0)
-        master.combination_label.grid(row=0, column=1)
-        master.repeat_label.grid(row=0, column=2)
-        master.select_permutations.grid(row=1, column=0)
-        master.select_combinations.grid(row=1, column=1)
-        master.select_repeats.grid(row=1, column= 2)
-        master.space_label.grid(row=2, columnspan=3)
-        master.n_label.grid(row=3, column=0)
-        master.k_label.grid(row=3, column=1)
-        master.n_entry.grid(row=4, column=0, padx=5, pady=5)
-        master.k_entry.grid(row=4, column=1, padx=5, pady=5)
-        master.calc.grid(row=4, column=2, pady=5)
+        master.n_label.grid(row=0, column=0)
+        master.k_label.grid(row=2, column=0)
+        master.n_entry.grid(row=1, column=0, padx=5, pady=2)
+        master.k_entry.grid(row=3, column=0, padx=5, pady=2)
+        master.separator.grid(row=0, column=1, rowspan=6, sticky='ns')
+        master.permutation_label.grid(row=0, column=2)
+        master.combination_label.grid(row=2, column=2)
+        master.repeat_label.grid(row=4, column=2)
+        master.select_permutations.grid(row=1, column=2)
+        master.select_combinations.grid(row=3, column=2)
+        master.select_repeats.grid(row=5, column= 2)
+        master.calc.grid(row=4, column=0, rowspan=2)
 
 def main():
     Gui(root)
