@@ -38,7 +38,7 @@ class Gui:
         self.master = master
         master.bind("<Escape>", lambda x : root.destroy())
         master.title = root.title('Combinatorics Generator')
-        master.icon = root.iconbitmap('C:/Users/ab5302/Desktop/safe.ico')
+        master.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
 
         #Labels
         master.permutation_label = Label(root, text='Permutations')
