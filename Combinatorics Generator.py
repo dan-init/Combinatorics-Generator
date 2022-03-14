@@ -70,8 +70,6 @@ class Gui:
         master.k_entry.grid(row=3, column=1, padx=5, pady=5)
         master.calc.grid(row=4, columnspan=2, pady=5)
 
-
-
 def main():
     Gui(root)
     root.mainloop()
