@@ -1,32 +1,41 @@
 from math import factorial
 from tkinter import VERTICAL, IntVar, Label, Button, Entry, Checkbutton, messagebox, Tk
+from tkinter import NORMAL, DISABLED, VERTICAL, IntVar, Label, Button, Entry, Checkbutton, messagebox, Tk
 from tkinter.ttk import Separator
 
 root = Tk()
-permutations_checkbox_state = IntVar()
-combinations_checkbox_state = IntVar()
-repeat_checkbox_state = IntVar()
+permutations_checkbox_value = IntVar()
+combinations_checkbox_value = IntVar()
+repeat_checkbox_value = IntVar()
 n = IntVar()
 k = IntVar()
 
+#User Prompts
 def display_results():
     """Displays messagebox depending on which checkboxes are selected"""
-    if permutations_checkbox_state.get() == 1 and repeat_checkbox_state.get() == 0:
+    if permutations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 0:
         permutations_no_repeats(n, k)
-    elif permutations_checkbox_state.get() == 1 and repeat_checkbox_state.get() == 1:
+    elif permutations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 1:
         permutations_with_repeats(n, k)
-    elif combinations_checkbox_state.get() == 1 and repeat_checkbox_state.get() == 0:
+    elif combinations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 0:
         combinations_no_repeats(n, k)
-    elif combinations_checkbox_state.get() == 1 and repeat_checkbox_state.get() == 1:
+    elif combinations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 1:
         combinations_with_repeats(n,k)
     else:
         display_error_message()
+        display_integer_error()
 
 def display_error_message():
     """Displays error message if prerequesite conidtions are not met"""
-    if permutations_checkbox_state.get() == 0 and combinations_checkbox_state.get() == 0 and repeat_checkbox_state.get() == 0 or 1:
+    if permutations_checkbox_value.get() == 0 and combinations_checkbox_value.get() == 0 and repeat_checkbox_value.get() == 0 or 1:
         messagebox.showerror('Error', 'Please select Combinations or Permutations!')
 
+def display_integer_error():
+    """Displays error message if integer is not entered in either entries"""
+    if n.get() or k.get() == type(''):
+        return messagebox.showerror('Error', 'Input should be integer')
+
+#Mathmatical operations
 def permutations_no_repeats(n:int, k:int) -> int:
     """Returns number of permutations possible where numbers cannot repeat"""
     non_repeat_permutations = (factorial(n.get())//factorial(n.get()-k.get()))
@@ -56,50 +65,64 @@ def combinations_with_repeats(n:int, k:int) -> int:
     'Combintations with repeat numbers: ' + str("{:,}".format(repeat_combinations)))
 
 class Gui:
-    def __init__(self, master):
-        
+    def __init__(self, master): 
+
         #Window set-up
-        self.master = master
+        self.master = self
         master.bind("<Escape>", lambda x : root.destroy())
-        master.title = root.title('Combinatorics Generator')
-        master.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
-        master.separator = Separator(root, orient = VERTICAL)
+        self.title = root.title('Combinatorics Generator')
+        self.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
+        self.separator = Separator(root, orient = VERTICAL)
 
         #Labels
-        master.permutation_label = Label(root, text='Permutations')
-        master.combination_label = Label(root, text='Combinations')
-        master.repeat_label = Label(root, text='Repeats allowed')
+        self.permutation_label = Label(root, text='Permutations')
+        self.combination_label = Label(root, text='Combinations')
+        self.repeat_label = Label(root, text='Repeats allowed')
 
         #Checkbuttons
-        master.select_permutations = Checkbutton(root, variable=permutations_checkbox_state, onvalue=1, offvalue=0 )
-        master.select_combinations = Checkbutton(root, variable=combinations_checkbox_state, onvalue=1, offvalue=0)
-        master.select_repeats = Checkbutton(root, variable=repeat_checkbox_state, onvalue=1, offvalue=0)
+        self.select_permutations = Checkbutton(root, variable=permutations_checkbox_value, onvalue=1, offvalue=0, command=self.disable_combination_checkbox)
+        self.select_combinations = Checkbutton(root, variable=combinations_checkbox_value, onvalue=1, offvalue=0, command=self.disable_permutation_checkbox)
+        self.select_repeats = Checkbutton(root, variable=repeat_checkbox_value, onvalue=1, offvalue=0)
 
         #Labels
-        master.n_label = Label(root, text='Enter n:')
-        master.k_label = Label(root, text='Enter k:')
+        self.n_label = Label(root, text='Enter n:')
+        self.k_label = Label(root, text='Enter k:')
 
         #Entries
-        master.n_entry = Entry(root, textvariable=n, width=10, justify='center')
-        master.k_entry = Entry(root, textvariable=k, width=10, justify='center')
+        self.n_entry = Entry(root, textvariable=n, width=10, justify='center')
+        self.k_entry = Entry(root, textvariable=k, width=10, justify='center')
 
         #Button
-        master.calc = Button(root, text='Calculate', command=display_results)
+        self.calc = Button(root, text='Calculate', command=display_results)
 
         #Grid
-        master.n_label.grid(row=0, column=2)
-        master.k_label.grid(row=2, column=2)
-        master.n_entry.grid(row=1, column=2, padx=10, pady=2)
-        master.k_entry.grid(row=3, column=2, padx=10, pady=2)
-        master.calc.grid(row=4, column=2, rowspan=2)
-        master.separator.grid(row=0, column=1, rowspan=6, sticky='ns', padx=5, pady=5)
-        master.permutation_label.grid(row=0, column=0)
-        master.combination_label.grid(row=2, column=0)
-        master.repeat_label.grid(row=4, column=0)
-        master.select_permutations.grid(row=1, column=0)
-        master.select_combinations.grid(row=3, column=0)
-        master.select_repeats.grid(row=5, column=0)
+        self.n_label.grid(row=0, column=2)
+        self.k_label.grid(row=2, column=2)
+        self.n_entry.grid(row=1, column=2, padx=10, pady=2)
+        self.k_entry.grid(row=3, column=2, padx=10, pady=2)
+        self.calc.grid(row=4, column=2, rowspan=2)
+        self.separator.grid(row=0, column=1, rowspan=6, sticky='ns', padx=5, pady=5)
+        self.permutation_label.grid(row=0, column=0)
+        self.combination_label.grid(row=2, column=0)
+        self.repeat_label.grid(row=4, column=0)
+        self.select_permutations.grid(row=1, column=0)
+        self.select_combinations.grid(row=3, column=0)
+        self.select_repeats.grid(row=5, column=0)
 
+    #Checkbutton functions
+    def disable_combination_checkbox(self):
+        """Disables combination checkbutton if permutations checkbutton is active"""
+        if permutations_checkbox_value.get() == 1:
+            self.select_combinations.config(state=DISABLED)
+        else:
+            self.select_combinations.config(state=NORMAL)
+
+    def disable_permutation_checkbox(self):
+        """Disables permutations checkbutton if combination checkbutton is active"""
+        if combinations_checkbox_value.get() == 1:
+            self.select_permutations.config(state=DISABLED)
+        else:
+            self.select_permutations.config(state=NORMAL)
 
 def main():
     Gui(root)
