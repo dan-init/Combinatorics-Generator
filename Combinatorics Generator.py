@@ -1,5 +1,4 @@
 from math import factorial
-from tkinter import VERTICAL, IntVar, Label, Button, Entry, Checkbutton, messagebox, Tk
 from tkinter import NORMAL, DISABLED, VERTICAL, IntVar, Label, Button, Entry, Checkbutton, messagebox, Tk
 from tkinter.ttk import Separator
 
@@ -9,6 +8,24 @@ combinations_checkbox_value = IntVar()
 repeat_checkbox_value = IntVar()
 n = IntVar()
 k = IntVar()
+
+#Error Handling
+def display_integer_error():
+    """Displays error message if integer is not entered in either entries"""
+    while True:
+        try:
+            n.get() or k.get() == int
+        except Exception as e:
+            e = 'n and k must be an integer!'
+            return messagebox.showerror('Error', e)
+        else:
+            display_results()
+            break
+
+def display_error_message():
+    """Displays error message if prerequesite conidtions are not met"""
+    if permutations_checkbox_value.get() == 0 and combinations_checkbox_value.get() == 0 and repeat_checkbox_value.get() == 0 or 1:
+        messagebox.showerror('Error', 'Please select Combinations or Permutations!')
 
 #User Prompts
 def display_results():
@@ -23,18 +40,7 @@ def display_results():
         combinations_with_repeats(n,k)
     else:
         display_error_message()
-        display_integer_error()
-
-def display_error_message():
-    """Displays error message if prerequesite conidtions are not met"""
-    if permutations_checkbox_value.get() == 0 and combinations_checkbox_value.get() == 0 and repeat_checkbox_value.get() == 0 or 1:
-        messagebox.showerror('Error', 'Please select Combinations or Permutations!')
-
-def display_integer_error():
-    """Displays error message if integer is not entered in either entries"""
-    if n.get() or k.get() == type(''):
-        return messagebox.showerror('Error', 'Input should be integer')
-
+    
 #Mathmatical operations
 def permutations_no_repeats(n:int, k:int) -> int:
     """Returns number of permutations possible where numbers cannot repeat"""
@@ -65,11 +71,11 @@ def combinations_with_repeats(n:int, k:int) -> int:
     'Combintations with repeat numbers: ' + str("{:,}".format(repeat_combinations)))
 
 class Gui:
-    def __init__(self, master): 
+    def __init__(self, primary): 
 
         #Window set-up
-        self.master = self
-        master.bind("<Escape>", lambda x : root.destroy())
+        self.primary = self
+        primary.bind("<Escape>", lambda x : root.destroy())
         self.title = root.title('Combinatorics Generator')
         self.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
         self.separator = Separator(root, orient = VERTICAL)
@@ -93,7 +99,7 @@ class Gui:
         self.k_entry = Entry(root, textvariable=k, width=10, justify='center')
 
         #Button
-        self.calc = Button(root, text='Calculate', command=display_results)
+        self.calc = Button(root, text='Calculate', command=display_integer_error)
 
         #Grid
         self.n_label.grid(row=0, column=2)
