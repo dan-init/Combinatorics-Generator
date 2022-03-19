@@ -10,46 +10,6 @@ n = IntVar()
 k = IntVar()
 result_string = StringVar()
 
-#Error Handling
-def validate_integer_input():
-    """Displays error message if integer is not entered in either entries"""
-    while True:
-        try:
-            n.get() or k.get() == int
-        except Exception as e0:
-            e0 = 'n and k must be an integer'
-            return messagebox.showerror('User Error', e0)
-        else:
-            validate_positive_integer()
-            break
-
-def validate_positive_integer():
-    while True:
-        if n.get() <=0 or k.get() <=0:
-            return messagebox.showerror('User error', 'Integer must be greater than 0')
-        else:
-            display_results()
-            break
-
-def selection_error_message():
-    """Displays error message if permutations or combinatons checkbuttons state is not active"""
-    if permutations_checkbox_value.get() == 0 and combinations_checkbox_value.get() == 0 and repeat_checkbox_value.get() == 0 or 1:
-        messagebox.showerror('User Error', 'Please select Combinations or Permutations!')
-
-#User Prompts
-def display_results():
-    """Displays messagebox depending on which checkboxes are selected"""
-    if permutations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 0:
-        permutations_no_repeats(n, k)
-    elif permutations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 1:
-        permutations_with_repeats(n, k)
-    elif combinations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 0:
-        combinations_no_repeats(n, k)
-    elif combinations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 1:
-        combinations_with_repeats(n,k)
-    else:
-        selection_error_message()
-    
 #Mathmatical operations
 def permutations_no_repeats(n:int, k:int) -> int:
     """Returns number of permutations possible where numbers cannot repeat"""
@@ -87,12 +47,55 @@ def combinations_with_repeats(n:int, k:int) -> int:
     UI.update_result_label()
     UI.disable_permutation_checkbox()
 
+#Error Handling
+def validate_integer_input():
+    """Displays error message if integer is not entered in either entries"""
+    while True:
+        try:
+            n.get() or k.get() == int
+        except Exception as e:
+            e = 'n and k must be an integer'
+            return messagebox.showerror('User Error', e)
+        else:
+            validate_positive_integer()
+            break
+
+def validate_positive_integer():
+    """Displays error message if integer is less than 0 in either entries"""
+    while True:
+        if n.get() <= -1 or k.get() <= -1:
+            return messagebox.showerror('User error', 'Integer must be greater than 0')
+        else:
+            display_results()
+            break
+
+def selection_error_message():
+    """Displays error message if permutations or combinatons checkbuttons state is not active"""
+    if permutations_checkbox_value.get() == 0 and combinations_checkbox_value.get() == 0 and repeat_checkbox_value.get() == 0 or 1:
+        messagebox.showerror('User Error', 'Please select Combinations or Permutations!')
+
+#output function
+def display_results():
+    """Displays messagebox depending on which checkboxes are selected"""
+    if permutations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 0:
+        permutations_no_repeats(n, k)
+    elif permutations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 1:
+        permutations_with_repeats(n, k)
+    elif combinations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 0:
+        combinations_no_repeats(n, k)
+    elif combinations_checkbox_value.get() == 1 and repeat_checkbox_value.get() == 1:
+        combinations_with_repeats(n,k)
+    else:
+        selection_error_message()
+
+#Tkinter window    
 class Gui:
     def __init__(self, primary): 
         
         #Window set-up
         self.primary = self
         primary.bind("<Escape>", lambda x : root.destroy())
+        primary.bind("<Return>", lambda x : validate_integer_input())
         primary.geometry('')
         self.title = root.title('Combinatorics Generator')
         self.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
@@ -103,7 +106,7 @@ class Gui:
         self.permutation_label = Label(root, text='Permutations')
         self.combination_label = Label(root, text='Combinations')
         self.repeat_label = Label(root, text='Repeats allowed')
-        self.result_label = Label(root, text='Results:')
+        self.result_label = Label(root, text='Results:', justify=CENTER)
         self.print_results = Label(root, textvariable=result_string, justify=CENTER,font='Verdana 9 bold')
 
         #Checkbuttons
@@ -140,13 +143,13 @@ class Gui:
         self.separator_right.grid(row=0, column=3, rowspan=6, sticky='ns', padx=5, pady=5)
         
         #Grid Right
-        self.result_label.grid(row=0, column=4)
+        self.result_label.grid(row=0, column=4, columnspan=6)
         self.print_results.grid(row=2, column=4, rowspan=2)
 
-    #Updates results_
+    #Updates result_string
     def update_result_label(self):
         """Updates the result_string variable based on user inputs"""
-        self.print_results.config(text='')
+        self.print_results.config(text='', padx=5)
         self.print_results.config(text=result_string.get())
 
     #Checkbutton functions
