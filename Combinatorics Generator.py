@@ -52,7 +52,7 @@ def validate_integer_input():
     """Displays error message if integer is not entered in either entries"""
     while True:
         try:
-            n.get() or k.get() == int
+            n.get() == int or k.get() == int
         except Exception as e:
             e = 'n and k must be an integer'
             return messagebox.showerror('User Error', e)
@@ -65,6 +65,15 @@ def validate_positive_integer():
     while True:
         if n.get() <= -1 or k.get() <= -1:
             return messagebox.showerror('User error', 'Integer must be greater than 0')
+        else:
+            validate_float_integer()
+            break
+
+def validate_float_integer():
+    """Displays error message if float entered in either entries"""
+    while True: 
+        if float(n.get()) or float(k.get()):
+            return messagebox.showerror('User Error', 'Integer cannot be float')
         else:
             display_results()
             break
