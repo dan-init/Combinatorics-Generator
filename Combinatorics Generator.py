@@ -22,7 +22,7 @@ def permutations_no_repeats(n:int, k:int) -> int:
 
 def permutations_with_repeats(n:int, k:int) -> int:
     """Returns number of permutations possible where numbers can repeat"""
-    repeat_permutations = (n.get()**k.get())
+    repeat_permutations = (k.get()**n.get())
     result_string.set('Permutations with\nrepeat numbers:\n\n'+ str("{:,}".format(repeat_permutations)))
     #Callback to functions inside Gui class
     UI = Gui(primary=root)
@@ -66,7 +66,7 @@ def validate_positive_integer():
         if n.get() <= -1 or k.get() <= -1:
             return messagebox.showerror('User error', 'Integer must be greater than 0')
         else:
-            validate_float_integer()
+            display_results()
             break
 
 def validate_float_integer():
@@ -107,7 +107,7 @@ class Gui:
         primary.bind("<Return>", lambda x : validate_integer_input())
         primary.geometry('')
         self.title = root.title('Combinatorics Generator')
-        self.icon = root.iconbitmap('C:/Users/ab5302/Documents/GitHub/Combinatorics-Generator/safe.ico')
+        # self.icon = root.iconbitmap('Coding/Python/Combinatorics-Generator/safe.ico')
         self.separator_left = Separator(root, orient=VERTICAL)
         self.separator_right = Separator(root, orient=VERTICAL)
 
