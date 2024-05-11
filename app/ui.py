@@ -1,44 +1,66 @@
+import tkinter as tk
 from tkinter.ttk import Separator
 from tkinter import CENTER, NORMAL, DISABLED, VERTICAL, IntVar, Label, Button, Entry, Checkbutton, StringVar, messagebox, Tk
-from model import MathOperations
+from model import MathOperations, UiFunctions
 
+class Gui(tk.Tk):
+    def __init__(self, math_functions:MathOperations, ui_functions:UiFunctions) -> None: 
+        super().__init__()
+        self.math_functions = math_functions
+        self.ui_functions = ui_functions
+        self.permutations_checkbox_value = IntVar()
+        self.combinations_checkbox_value = IntVar()
+        self.repeat_checkbox_value = IntVar()
+        self.n = IntVar()
+        self.k = IntVar()
+        self.result_string = StringVar()
 
-class Gui:
-    def __init__(self, primary): 
-        
         #Window set-up
-        self.primary = self
-        primary.bind("<Escape>", lambda x : root.destroy())
-        primary.bind("<Return>", lambda x : validate_integer_input())
-        primary.geometry('')
-        self.title = root.title('Combinatorics Generator')
+        self.bind("<Escape>", lambda x : self.destroy())
+        self.bind("<Return>", lambda x : ui_functions.validate_integer_input())
+        self.geometry('')
+        self.title('Combinatorics Generator')
         
-        # self.icon = root.iconbitmap('Coding/Python/Combinatorics-Generator/safe.ico')
-        self.separator_left = Separator(root, orient=VERTICAL)
-        self.separator_right = Separator(root, orient=VERTICAL)
+        # self.icon = self.iconbitmap('Coding/Python/Combinatorics-Generator/safe.ico')
+        self.separator_left = Separator(self, orient=VERTICAL)
+        self.separator_right = Separator(self, orient=VERTICAL)
 
         #Labels
-        self.permutation_label = Label(root, text='Permutations')
-        self.combination_label = Label(root, text='Combinations')
-        self.repeat_label = Label(root, text='Repeats allowed')
-        self.result_label = Label(root, text='Results:', justify=CENTER)
-        self.print_results = Label(root, textvariable=result_string, justify=CENTER,font='Verdana 9 bold')
+        self.permutation_label = Label(self, text='Permutations')
+        self.combination_label = Label(self, text='Combinations')
+        self.repeat_label = Label(self, text='Repeats allowed')
+        self.result_label = Label(self, text='Results:', justify=CENTER)
+        self.print_results = Label(self, textvariable=self.result_string, justify=CENTER,font='Verdana 9 bold')
 
         #Checkbuttons
-        self.select_permutations = Checkbutton(root, variable=permutations_checkbox_value, onvalue=1, offvalue=0, command=self.disable_combination_checkbox)
-        self.select_combinations = Checkbutton(root, variable=combinations_checkbox_value, onvalue=1, offvalue=0, command=self.disable_permutation_checkbox)
-        self.select_repeats = Checkbutton(root, variable=repeat_checkbox_value, onvalue=1, offvalue=0)
+        self.select_permutations = Checkbutton(self, 
+                                               variable=self.permutations_checkbox_value, 
+                                               onvalue=1, 
+                                               offvalue=0, 
+                                               command=self.disable_combination_checkbox
+                                               )
+        self.select_combinations = Checkbutton(self, 
+                                               variable=self.combinations_checkbox_value, 
+                                               onvalue=1, 
+                                               offvalue=0, 
+                                               command=self.disable_permutation_checkbox
+                                               )
+        self.select_repeats = Checkbutton(self, 
+                                          variable=self.repeat_checkbox_value, 
+                                          onvalue=1, 
+                                          offvalue=0
+                                          )
 
         #Labels
-        self.n_label = Label(root, text='Enter n:')
-        self.k_label = Label(root, text='Enter k:')
+        self.n_label = Label(self, text='Enter n:')
+        self.k_label = Label(self, text='Enter k:')
 
         #Entries
-        self.n_entry = Entry(root, textvariable=n, width=10, justify='center')
-        self.k_entry = Entry(root, textvariable=k, width=10, justify='center')
+        self.n_entry = Entry(self, textvariable=self.n, width=10, justify='center')
+        self.k_entry = Entry(self, textvariable=self.k, width=10, justify='center')
 
         #Button
-        self.calc = Button(root, text='Calculate', command=validate_integer_input)
+        self.calc = Button(self, text='Calculate', command=ui_functions.validate_integer_input)
 
         #Grid left
         self.permutation_label.grid(row=0, column=0, pady=5)
@@ -62,22 +84,22 @@ class Gui:
         self.print_results.grid(row=2, column=4, rowspan=2)
 
     #Updates result_string
-    def update_result_label(self):
+    def update_result_label(self) -> None:
         """Updates the result_string variable based on user inputs"""
         self.print_results.config(text='', padx=5)
-        self.print_results.config(text=result_string.get())
+        self.print_results.config(text=self.result_string.get())
 
     #Checkbutton functions
-    def disable_combination_checkbox(self):
+    def disable_combination_checkbox(self) -> None:
         """Disables combination checkbutton if permutations checkbutton is active"""
-        if permutations_checkbox_value.get() == 1:
+        if self.permutations_checkbox_value.get() == 1:
             self.select_combinations.config(state=DISABLED)
         else:
             self.select_combinations.config(state=NORMAL)
 
-    def disable_permutation_checkbox(self):
+    def disable_permutation_checkbox(self) -> None:
         """Disables permutations checkbutton if combination checkbutton is active"""
-        if combinations_checkbox_value.get() == 1:
+        if self.combinations_checkbox_value.get() == 1:
             self.select_permutations.config(state=DISABLED)
         else:
             self.select_permutations.config(state=NORMAL)
